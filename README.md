@@ -1,26 +1,27 @@
 # Informações sobre o Trabalho de Conclusão de Curso (TCC)
 `TÍTULO DO TCC`  
 
-Trabalho de Conclusão de Curso (TCC)
+Integração de Single Sign-On em Microfrontends: Desafios e Estratégias com Vite e Module Federation
 
-`CURSO`: 
+`CURSO`
 
-`SEMESTRE:`
+Sistemas de Informação
 
-`Objetivos de Desenvolvimento Sustentável (ODS) da ONU:` 
-> Incluir o(s) número(s) e a(s) descrição(ões) do(s) ODS da ONU que o TCC atende. 
+`SEMESTRE`
+
+8° semestre
+
+`Objetivos de Desenvolvimento Sustentável (ODS) da ONU`
+- ODS 9: Indústria, Inovação e Infraestrutura
 
 ## Participantes
 
 Os membros da equipe são: 
-- Fulano da Silva
-- Ciclano Albuquerque
-
-> Incluir a lista dos membros da equipe com seus nomes completos.
+- Caroline Clara de Souza
+- Wesley Dias Maciel
 
 # Estrutura do Projeto
-
-1. [Contexto](./docs/1-Contexto.md)
+1. [Contexto](./docs/1-Introdução.md)
 2. [Especificação do Projeto](./docs/2-Especificação.md)
 4. [Gerenciamento do Projeto](./docs/4-Gerenciamento-Projeto.md)
 5. [Implementação](./docs/5-Implementação.md)
