@@ -3,8 +3,9 @@ import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 
 import vue from '@vitejs/plugin-vue';
-// import vueDevTools from 'vite-plugin-vue-devtools';
+import vueDevTools from 'vite-plugin-vue-devtools';
 import federation from '@originjs/vite-plugin-federation';
+
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -17,6 +18,9 @@ export default defineConfig({
       remotes: {
         auth: 'https://localhost:3002/assets/remoteEntry.js',
         dashboard: 'https://localhost:3003/assets/remoteEntry.js',
+        'with-auth': 'https://localhost:3010/assets/remoteEntry.js',
+        'half-auth': 'https://localhost:3011/assets/remoteEntry.js',
+        'without-auth': 'https://localhost:3013/assets/remoteEntry.js',
       },
       shared: [
         {
@@ -25,22 +29,10 @@ export default defineConfig({
             singleton: true,
             requiredVersion: '^3.5.13',
           },
-          pinia: {
-            // @ts-expect-error Interface desatualizada
-            singleton: true,
-            requiredVersion: '^3.0.1',
-          },
-          'vue-router': {
-            // @ts-expect-error Interface desatualizada
-            singleton: true,
-            requiredVersion: '^4.5.0',
-          },
-          axios: {
-            requiredVersion: '^1.8.4',
-          },
         },
       ],
     }),
+    vueDevTools(),
   ],
   resolve: {
     alias: {

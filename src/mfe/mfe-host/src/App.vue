@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onBeforeUnmount } from 'vue';
+import { onBeforeMount, onBeforeUnmount } from 'vue';
 
 import { RouterView, useRouter } from 'vue-router';
 
@@ -26,6 +26,10 @@ window.addEventListener('auth:logout', () => {
   router.push({ name: 'login' });
 });
 
+onBeforeMount(() => {
+  authStore.fillUserSession();
+});
+
 onBeforeUnmount(() => {
   window.removeEventListener('auth:login', () => void 0);
   window.removeEventListener('auth:logout', () => void 0);
@@ -43,6 +47,12 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss" scoped>
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body,
 html {
   margin: 0;
@@ -52,7 +62,6 @@ html {
 }
 
 .layout {
-  display: flex;
   height: 100vh;
   overflow: hidden;
 
