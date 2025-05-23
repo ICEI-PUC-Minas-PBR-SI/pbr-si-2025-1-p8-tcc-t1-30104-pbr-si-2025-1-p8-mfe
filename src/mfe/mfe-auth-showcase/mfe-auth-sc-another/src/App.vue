@@ -12,6 +12,17 @@ function isAuthenticated() {
 
   if (!auth) {
     alert('Não autenticado!');
+
+    // Esse evento customizado nunca será escutado, pois, está em outro domínio.
+    window.dispatchEvent(
+      new CustomEvent('auth:status', {
+        detail: {
+          source: 'mfe-auth-sc-another',
+          payload: 'Não autenticado.',
+          success: false,
+        },
+      }),
+    );
     return false;
   }
 

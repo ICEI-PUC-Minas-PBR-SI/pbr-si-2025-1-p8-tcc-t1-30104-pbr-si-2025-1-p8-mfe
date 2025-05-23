@@ -1,3 +1,19 @@
+<script lang="ts" setup>
+import { onBeforeMount } from 'vue'
+
+onBeforeMount(() => {
+  window.dispatchEvent(
+    new CustomEvent('auth:status', {
+      detail: {
+        source: 'mfe-auth-sc-without',
+        payload: 'Recurso disponível.',
+        success: true,
+      },
+    }),
+  )
+})
+</script>
+
 <template>
   <section class="without-auth">
     <div class="field">

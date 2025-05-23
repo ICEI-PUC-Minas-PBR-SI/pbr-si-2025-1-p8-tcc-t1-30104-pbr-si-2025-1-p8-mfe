@@ -8,7 +8,19 @@ onBeforeMount(() => {
 });
 
 function isAuthenticated() {
-  return window.__globalAuth__?.isAuthenticated;
+  const auth = window.__globalAuth__;
+
+  window.dispatchEvent(
+    new CustomEvent('auth:status', {
+      detail: {
+        source: 'mfe-auth-sc-with',
+        payload: auth.isAuthenticated ? 'Autenticado.' : 'Não autenticado.',
+        success: auth.isAuthenticated,
+      },
+    }),
+  );
+
+  return auth.isAuthenticated;
 }
 </script>
 

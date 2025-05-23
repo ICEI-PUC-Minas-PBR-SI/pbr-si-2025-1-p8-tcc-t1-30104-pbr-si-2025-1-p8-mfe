@@ -70,7 +70,7 @@ const modalMap: Record<TMFEOptions, IMFEModal> = {
     title: 'MFE 04 – Autenticação não Necessária',
     description:
       'Esse Microfrontend exibe seu conteúdo independente do usuário estar autenticado ou não.',
-    component: markRaw(defineAsyncComponent(() => import('without-auth/WithoutAuth'))),
+    component: markRaw(defineAsyncComponent(() => import('without-auth/WithoutAuthForm'))),
   },
 };
 
@@ -80,11 +80,14 @@ function handleAuthStatus() {
   if (simulatedAuthStatus.value) {
     authStore.simulateAuthenticated();
     actionTokenLabel.value = 'Revogar';
-    notify.success('Autenticação ratificada com sucesso!');
+    notify.success('Autenticação foi ratificada.');
   } else {
     authStore.simulateNotAuthenticated();
     actionTokenLabel.value = 'Ratificar';
-    notify.success('Autenticação revogada com sucesso!');
+    notify.open({
+      type: 'warning',
+      message: 'Autenticação foi revogada.',
+    });
   }
 }
 
@@ -95,8 +98,14 @@ function handleShowcaseModal(id: TMFEOptions) {
 
 function handleCopyCookie() {
   navigator.clipboard.writeText(authStore.readCookie);
-  notify.success('Cookie copiado com sucesso!');
+  notify.success('Cookie copiado para a área de transferência.');
 }
+
+window.addEventListener('auth:status', (event: Event) => {
+  const { payload, source, success } = event.detail;
+  const message = `${source}: ${payload}`;
+  success ? notify.success(message) : notify.error(message);
+});
 
 onMounted(() => {
   authStore.simulateAuthenticated();
@@ -104,6 +113,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   authStore.simulateAuthenticated();
+  window.removeEventListener('auth:status', () => void 0);
 });
 </script>
 
