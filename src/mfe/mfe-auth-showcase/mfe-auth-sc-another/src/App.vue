@@ -1,23 +1,30 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 
-const isAuthenticated = ref(false);
+const isAuth = ref(false);
 
-window.addEventListener('internal-auth:login', () => {
-  isAuthenticated.value = true;
+onBeforeMount(() => {
+  isAuth.value = isAuthenticated();
 });
 
-window.addEventListener('internal-auth:logout', () => {
-  isAuthenticated.value = false;
-});
+function isAuthenticated() {
+  const auth = window.__globalAuth__;
+
+  if (!auth) {
+    alert('Não autenticado!');
+    return false;
+  }
+
+  return auth?.isAuthenticated;
+}
 </script>
 
 <template>
   <div class="another-auth">
-    <div v-if="isAuthenticated" class="another-auth--authenticated box">
+    <div v-if="isAuth" class="another-auth--authenticated">
       <p>Bem-vindo ao Microfrontend que espera outra autenticação.</p>
     </div>
-    <div v-else class="another-auth--not-authenticated box has-text-centered">
+    <div v-else class="another-auth--unauthenticated has-text-centered py-6">
       <span class="icon is-small">
         <span class="material-icons">warning</span>
       </span>
@@ -25,12 +32,3 @@ window.addEventListener('internal-auth:logout', () => {
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.another-auth {
-  .box {
-    box-shadow: none;
-    border: 1px solid #404654;
-  }
-}
-</style>

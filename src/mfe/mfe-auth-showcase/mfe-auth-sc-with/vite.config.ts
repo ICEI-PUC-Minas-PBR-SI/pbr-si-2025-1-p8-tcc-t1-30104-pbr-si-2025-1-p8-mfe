@@ -17,10 +17,18 @@ export default defineConfig({
       name: 'with-auth',
       filename: 'remoteEntry.js',
       exposes: {
-        './WithAuthModal': './src/components/WithAuthModal.vue',
+        './WithAuthForm': './src/components/WithAuthForm.vue',
       },
       remotes: {},
-      shared: ['vue', 'pinia'],
+      shared: [
+        {
+          vue: {
+            // @ts-expect-error Prop singleton existe, mas a interface está desatualizada
+            singleton: true,
+            requiredVersion: '^3.5.13',
+          },
+        },
+      ],
     }),
   ],
   resolve: {
@@ -53,5 +61,11 @@ export default defineConfig({
         'Origin, X-Requested-With, Content-Type, Accept, Authorization',
       'Access-Control-Allow-Credentials': 'true',
     },
+  },
+  preview: {
+    port: 3010,
+  },
+  build: {
+    target: 'esnext',
   },
 });
