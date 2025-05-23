@@ -2,18 +2,21 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth.ts';
 import { storeToRefs } from 'pinia';
 
+import DashboardView from 'dashboard/DashboardView';
+import LoginView from 'auth/LoginView';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '',
       name: 'dashboard',
-      component: () => import('dashboard/DashboardView'),
+      component: DashboardView,
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('auth/LoginView'),
+      component: LoginView,
     },
     {
       path: '/auth-showcase',
@@ -22,15 +25,6 @@ const router = createRouter({
     },
   ],
 });
-
-// component: async () => {
-//   try {
-//     const module = await import('auth/LoginView');
-//     return module.default;
-//   } catch (error) {
-//     console.error('Erro ao carregar a view de login:', error);
-//   }
-// },
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore();

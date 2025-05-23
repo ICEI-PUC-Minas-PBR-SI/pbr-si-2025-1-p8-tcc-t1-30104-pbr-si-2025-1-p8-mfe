@@ -19,7 +19,15 @@ export default defineConfig({
         './AnotherAuth': './src/App.vue',
       },
       remotes: {},
-      shared: ['vue'],
+      shared: [
+        {
+          vue: {
+            // @ts-expect-error Prop singleton existe, mas a interface está desatualizada
+            singleton: true,
+            requiredVersion: '^3.5.13',
+          },
+        },
+      ],
     }),
   ],
   resolve: {
@@ -33,13 +41,14 @@ export default defineConfig({
     // @ts-expect-error O plugin basic-ssl garante que o https possa ser do tipo boolean
     https: true,
     cors: true,
-    open: 'https://another.auth.localhost:3012/',
+    host: 'another.auth.localhost',
     origin: 'https://another.auth.localhost',
   },
   preview: {
     port: 3012,
     // @ts-expect-error O plugin basic-ssl garante que o https possa ser do tipo boolean
     https: true,
+    host: 'another.auth.localhost',
   },
   build: {
     target: 'esnext',

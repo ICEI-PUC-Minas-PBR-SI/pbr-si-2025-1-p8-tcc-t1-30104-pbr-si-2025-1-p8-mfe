@@ -5,14 +5,12 @@ import type { IUser } from '@/types/User.ts';
 export interface IAuthState {
   isAuthenticated: boolean;
   user: IUser | null;
-  cookieBackup: string;
 }
 
 export const useAuthStore = defineStore('auth', {
   state: (): IAuthState => ({
     isAuthenticated: false,
     user: null,
-    cookieBackup: '',
   }),
   actions: {
     login(user: IUser) {
@@ -26,32 +24,33 @@ export const useAuthStore = defineStore('auth', {
     checkAuth() {
       this.isAuthenticated = document.cookie.includes('auth_token=');
     },
-    revokeCookie() {
-      this.cookieBackup = document.cookie;
-      document.cookie = 'auth_token=; Max-Age=0; path=/; Secure; SameSite=None';
-      this.isAuthenticated = false;
+    fillUserSession() {
+      if (!this.user) {
+        const stored = sessionStorage.getItem('auth:user');
+        const authPayload = stored ? JSON.parse(stored) : null;
 
-      sessionStorage.removeItem('auth:user');
+        if (authPayload) {
+          this.login(authPayload.user);
+        }
+      }
+    },
+    simulateNotAuthenticated() {
       window.__globalAuth__ = {
         user: null,
         isAuthenticated: false,
       };
     },
-    ratifyCookie() {
-      document.cookie = this.cookieBackup;
-      this.cookieBackup = '';
-      this.isAuthenticated = true;
-
-      const auth = {
+    simulateAuthenticated() {
+      window.__globalAuth__ = {
         user: this.user,
-        isAuthenticated: this.isAuthenticated,
+        isAuthenticated: true,
       };
-
-      sessionStorage.setItem('auth:user', JSON.stringify(auth));
-      window.__globalAuth__ = auth;
     },
   },
   getters: {
+    simulatedAuthStatus() {
+      return !!window.__globalAuth__ ? window.__globalAuth__.isAuthenticated : true;
+    },
     readCookie() {
       return document.cookie;
     },
