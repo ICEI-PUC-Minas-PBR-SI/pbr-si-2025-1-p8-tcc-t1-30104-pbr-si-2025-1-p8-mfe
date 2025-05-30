@@ -18,7 +18,15 @@ export default defineConfig({
       exposes: {
         './DashboardView': './src/views/DashboardView.vue',
       },
-      shared: ['vue'],
+      shared: [
+        {
+          vue: {
+            // @ts-expect-error Prop singleton existe, mas a interface está desatualizada
+            singleton: true,
+            requiredVersion: '^3.5.13',
+          },
+        },
+      ],
     }),
   ],
   resolve: {
