@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { provide, ref } from 'vue';
+import { provide, type Ref, ref } from 'vue';
 
 import loginService from '@/services/LoginService.ts';
 import registerService from '@/services/RegisterService.ts';
@@ -11,9 +11,13 @@ import type { TRegisterHandler } from '@/types/Register.ts';
 import LoginForm from '@/components/forms/LoginForm.vue';
 import RegisterForm from '@/components/forms/RegisterForm.vue';
 
+import { useFeedback } from '@/composables/useFeedback.ts';
+
 const isLogin = ref(true);
 const cardTitle = ref('Login');
 const buttonLabel = ref('Signup');
+
+const isLoading = ref(false);
 
 function toggleForm() {
   isLogin.value = !isLogin.value;
@@ -22,27 +26,48 @@ function toggleForm() {
 }
 
 function loginHandler(email?: string, password?: string) {
+  isLoading.value = true;
+
   if (email && password) {
-    loginService({ email, password }).then(() => {
-      fetchUserInfo();
-    });
+    loginService({ email, password })
+      .then(() => {
+        fetchUserInfo();
+      })
+      .catch((error) => {
+        useFeedback('error', error);
+      })
+      .finally(() => {
+        isLoading.value = false;
+      });
   } else {
-    alert('Erro ao tentar efetuar login.');
+    useFeedback('warning', 'Informe todos os campos para continuar');
+    isLoading.value = false;
   }
 }
 
 function registerHandler(name?: string, email?: string, password?: string) {
+  isLoading.value = true;
+
   if (name && email && password) {
-    registerService(name, email, password).then(() => {
-      toggleForm();
-    });
+    registerService(name, email, password)
+      .then(() => {
+        toggleForm();
+      })
+      .catch((error) => {
+        useFeedback('error', error);
+      })
+      .finally(() => {
+        isLoading.value = false;
+      });
   } else {
-    alert('Erro ao tentar cadastrar usuário.');
+    useFeedback('warning', 'Informe todos os campos para continuar');
+    isLoading.value = false;
   }
 }
 
 provide<TLoginHandler>('loginHandler', loginHandler);
 provide<TRegisterHandler>('registerHandler', registerHandler);
+provide<Ref<boolean>>('isLoading', isLoading);
 </script>
 
 <template>
@@ -65,6 +90,7 @@ provide<TRegisterHandler>('registerHandler', registerHandler);
           <register-form v-else key="register" />
         </transition>
         <input
+          :disabled="isLoading"
           :value="buttonLabel"
           class="button is-white login-container__card__content__switch-btn"
           type="button"
