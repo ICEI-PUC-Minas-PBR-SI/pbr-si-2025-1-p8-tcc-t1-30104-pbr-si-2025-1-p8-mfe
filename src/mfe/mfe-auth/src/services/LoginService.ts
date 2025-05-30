@@ -15,6 +15,7 @@ export default async function loginService(params: ILoginParams) {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    return error.message;
+    const message = error.response?.data.message || error.message;
+    throw new Error(message);
   }
 }
