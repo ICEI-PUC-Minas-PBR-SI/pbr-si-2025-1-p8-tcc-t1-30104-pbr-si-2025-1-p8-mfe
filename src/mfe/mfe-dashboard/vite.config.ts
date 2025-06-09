@@ -3,15 +3,17 @@ import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 
 import vue from '@vitejs/plugin-vue';
-import vueDevTools from 'vite-plugin-vue-devtools';
+
 import federation from '@originjs/vite-plugin-federation';
+import compression from 'vite-plugin-compression';
+
 import fs from 'node:fs';
 import path from 'node:path';
 
 export default defineConfig({
   plugins: [
     vue(),
-    vueDevTools(),
+    compression({ algorithm: 'brotliCompress' }),
     federation({
       name: 'dashboard',
       filename: 'remoteEntry.js',
@@ -24,6 +26,11 @@ export default defineConfig({
             // @ts-expect-error Prop singleton existe, mas a interface está desatualizada
             singleton: true,
             requiredVersion: '^3.5.13',
+          },
+          bulma: {
+            // @ts-expect-error Prop singleton existe, mas a interface está desatualizada
+            singleton: true,
+            eager: false,
           },
         },
       ],
@@ -64,9 +71,17 @@ export default defineConfig({
     port: 3003,
   },
   build: {
-    modulePreload: false,
+    modulePreload: true,
     target: 'esnext',
-    minify: true,
-    cssCodeSplit: false,
+    minify: 'terser',
+    cssCodeSplit: true,
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue'],
+        },
+      },
+    },
   },
 });

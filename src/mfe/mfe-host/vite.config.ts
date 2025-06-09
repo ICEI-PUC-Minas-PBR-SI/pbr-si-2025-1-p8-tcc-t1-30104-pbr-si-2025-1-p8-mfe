@@ -3,8 +3,9 @@ import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 
 import vue from '@vitejs/plugin-vue';
-import vueDevTools from 'vite-plugin-vue-devtools';
+
 import federation from '@originjs/vite-plugin-federation';
+import compression from 'vite-plugin-compression';
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -12,6 +13,7 @@ import path from 'node:path';
 export default defineConfig({
   plugins: [
     vue(),
+    compression({ algorithm: 'brotliCompress' }),
     federation({
       name: 'host',
       filename: 'remoteEntry.js',
@@ -29,10 +31,17 @@ export default defineConfig({
             singleton: true,
             requiredVersion: '^3.5.13',
           },
+          axios: {
+            requiredVersion: '^1.8.4',
+          },
+          bulma: {
+            // @ts-expect-error Prop singleton existe, mas a interface está desatualizada
+            singleton: true,
+            eager: false,
+          },
         },
       ],
     }),
-    vueDevTools(),
   ],
   resolve: {
     alias: {
@@ -61,9 +70,10 @@ export default defineConfig({
     port: 3000,
   },
   build: {
-    modulePreload: false,
+    modulePreload: true,
     target: 'esnext',
-    minify: false,
-    cssCodeSplit: false,
+    minify: 'terser',
+    cssCodeSplit: true,
+    sourcemap: true,
   },
 });
