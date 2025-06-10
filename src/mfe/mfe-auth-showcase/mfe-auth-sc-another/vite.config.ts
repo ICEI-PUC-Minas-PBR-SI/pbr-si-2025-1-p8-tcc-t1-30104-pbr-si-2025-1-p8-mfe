@@ -1,16 +1,17 @@
 import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
+
 import vue from '@vitejs/plugin-vue';
-import vueDevTools from 'vite-plugin-vue-devtools';
 
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import federation from '@originjs/vite-plugin-federation';
+import compression from 'vite-plugin-compression';
 
 export default defineConfig({
   plugins: [
     vue(),
-    vueDevTools(),
+    compression({ algorithm: 'brotliCompress' }),
     basicSsl(),
     federation({
       name: 'another-auth',
@@ -24,7 +25,12 @@ export default defineConfig({
           vue: {
             // @ts-expect-error Prop singleton existe, mas a interface está desatualizada
             singleton: true,
-            requiredVersion: '^3.5.13',
+            eager: false,
+          },
+          bulma: {
+            // @ts-expect-error Prop singleton existe, mas a interface está desatualizada
+            singleton: true,
+            requiredVersion: '^1.0.3',
           },
         },
       ],
@@ -51,8 +57,17 @@ export default defineConfig({
     host: 'another.auth.localhost',
   },
   build: {
+    modulePreload: true,
     target: 'esnext',
-    minify: false,
+    minify: 'terser',
     cssCodeSplit: true,
+    sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue'],
+        },
+      },
+    },
   },
 });

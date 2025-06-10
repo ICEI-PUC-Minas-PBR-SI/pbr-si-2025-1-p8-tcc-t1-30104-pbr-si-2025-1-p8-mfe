@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, ref } from 'vue';
+import { inject, type Ref, ref } from 'vue';
 
 import type { TLoginHandler } from '@/types/Login.ts';
 
@@ -7,14 +7,16 @@ const email = ref<string>('');
 const password = ref<string>('');
 
 const loginHandler = inject<TLoginHandler>('loginHandler', () => void 0);
+const isLoading = inject<Ref<boolean>>('isLoading');
 </script>
 
 <template>
-  <form key="login-form" class="login-form" @submit.prevent="loginHandler(email, password)">
+  <form key="login-form" class="login-form">
     <div class="field login-form__field">
-      <label class="label">Email</label>
+      <label class="label" for="email">Email</label>
       <p class="control has-icons-left has-icons-right">
         <input
+          id="email"
           v-model="email"
           class="input is-dark login-form__field__input"
           type="email"
@@ -26,15 +28,26 @@ const loginHandler = inject<TLoginHandler>('loginHandler', () => void 0);
       </p>
     </div>
     <div class="field login-form__field">
-      <label class="label">Password</label>
+      <label class="label" for="password">Password</label>
       <p class="control has-icons-left has-icons-right">
-        <input v-model="password" class="input is-dark login-form__field__input" type="password" />
+        <input
+          id="password"
+          v-model="password"
+          class="input is-dark login-form__field__input"
+          type="password"
+        />
         <span class="icon is-small is-left login-form__field__icon">
           <span class="material-icons">lock</span>
         </span>
       </p>
     </div>
-    <input class="button is-dark submit-btn" type="submit" value="Login" />
+    <input
+      :disabled="isLoading"
+      class="button is-dark submit-btn"
+      type="button"
+      value="Login"
+      @click="loginHandler(email, password)"
+    />
   </form>
 </template>
 

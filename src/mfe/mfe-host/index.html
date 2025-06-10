@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <link href="/favicon.ico" rel="icon">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link as="style" href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          onload="this.onload=null;this.rel='stylesheet'"
+          rel="preload">
+    <noscript>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </noscript>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>MFE Showcase</title>
 </head>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, ref } from 'vue';
+import { inject, type Ref, ref } from 'vue';
 
 import type { TRegisterHandler } from '@/types/Register.ts';
 
@@ -8,21 +8,18 @@ const email = ref<string>('');
 const password = ref<string>('');
 
 const registerHandler = inject<TRegisterHandler>('registerHandler', () => void 0);
+const isLoading = inject<Ref<boolean>>('isLoading');
 </script>
 
 <template>
-  <form
-    key="register-form"
-    class="register-form"
-    @submit.prevent="registerHandler(name, email, password)"
-  >
+  <form key="register-form" class="register-form">
     <div class="field register-form__field">
-      <label class="label">Name</label>
+      <label class="label" for="name">Name</label>
       <p class="control has-icons-left has-icons-right">
         <input
+          id="name"
           v-model="name"
           class="input is-dark register-form__field__input"
-          type="email"
           @invalid="(event) => event.preventDefault()"
         />
         <span class="icon is-small is-left register-form__field__icon">
@@ -31,9 +28,10 @@ const registerHandler = inject<TRegisterHandler>('registerHandler', () => void 0
       </p>
     </div>
     <div class="field register-form__field">
-      <label class="label">Email</label>
+      <label class="label" for="email">Email</label>
       <p class="control has-icons-left has-icons-right">
         <input
+          id="email"
           v-model="email"
           class="input is-dark register-form__field__input"
           type="email"
@@ -45,9 +43,10 @@ const registerHandler = inject<TRegisterHandler>('registerHandler', () => void 0
       </p>
     </div>
     <div class="field register-form__field">
-      <label class="label">Password</label>
+      <label class="label" for="password">Password</label>
       <p class="control has-icons-left has-icons-right">
         <input
+          id="password"
           v-model="password"
           class="input is-dark register-form__field__input"
           type="password"
@@ -57,7 +56,13 @@ const registerHandler = inject<TRegisterHandler>('registerHandler', () => void 0
         </span>
       </p>
     </div>
-    <input class="button is-dark submit-btn" type="submit" value="Create account" />
+    <input
+      :disabled="isLoading"
+      class="button is-dark submit-btn"
+      type="button"
+      value="Create account"
+      @click="registerHandler(name, email, password)"
+    />
   </form>
 </template>
 

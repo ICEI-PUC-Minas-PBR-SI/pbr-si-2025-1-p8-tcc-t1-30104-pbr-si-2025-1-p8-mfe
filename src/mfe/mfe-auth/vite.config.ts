@@ -3,10 +3,9 @@ import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
 
 import vue from '@vitejs/plugin-vue';
-// import vueDevTools from 'vite-plugin-vue-devtools';
+
 import federation from '@originjs/vite-plugin-federation';
 import compression from 'vite-plugin-compression';
-import { visualizer } from 'rollup-plugin-visualizer';
 
 import * as fs from 'node:fs';
 import path from 'node:path';
@@ -15,7 +14,6 @@ export default defineConfig({
   plugins: [
     vue(),
     compression({ algorithm: 'brotliCompress' }),
-    visualizer({ open: true }),
     federation({
       name: 'auth',
       filename: 'remoteEntry.js',
@@ -33,6 +31,11 @@ export default defineConfig({
           },
           axios: {
             requiredVersion: '^1.8.4',
+          },
+          bulma: {
+            // @ts-expect-error Prop singleton existe, mas a interface está desatualizada
+            singleton: true,
+            eager: false,
           },
         },
       ],
@@ -77,6 +80,7 @@ export default defineConfig({
     target: 'esnext',
     minify: 'terser',
     cssCodeSplit: true,
+    sourcemap: true,
     rollupOptions: {
       output: {
         manualChunks: {
