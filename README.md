@@ -1,5 +1,6 @@
 # Informações sobre o Trabalho de Conclusão de Curso (TCC)
-`TÍTULO DO TCC`  
+
+`TÍTULO DO TCC`
 
 Integração de Single Sign-On em Microfrontends: Desafios e Estratégias com Vite e Module Federation
 
@@ -12,23 +13,26 @@ Sistemas de Informação
 8° semestre
 
 `Objetivos de Desenvolvimento Sustentável (ODS) da ONU`
+
 - ODS 9: Indústria, Inovação e Infraestrutura
 
 ## Participantes
 
-Os membros da equipe são: 
+Os membros da equipe são:
+
 - Caroline Clara de Souza
 - Wesley Dias Maciel
 
 # Estrutura do Projeto
-1. [Contexto](./docs/1-Introdução.md)
-2. [Especificação do Projeto](./docs/2-Especificação.md)
-4. [Gerenciamento do Projeto](./docs/4-Gerenciamento-Projeto.md)
-5. [Implementação](./docs/5-Implementação.md)
-6. [Referências](./docs/6-Referências.md)
-7. [Apresentação do trabalho](./docs/apresentacao/README.md) 
 
-
+1. [Introdução](./docs/1-Introdução.md)
+2. [Trabalhos Relacionados](./docs/2-TrabalhosRelacionados.md)
+3. [Metodologia](./docs/3-Metodologia.md)
+4. [Desenvolvimento](./docs/4-Desenvolvimento.md)
+5. [Resultado](./docs/5-Resultado.md)
+6. [Conclusão](./docs/6-Conclusão.md)
+7. [Referências](./docs/7-Referências.md)
+8. [Apresentação do trabalho](./docs/apresentacao/README.md)
 
 ## Pasta docs
 
@@ -47,11 +51,3 @@ videos do trabalho.
 ## Pasta src
 
 Este diretório armazena o código fonte do projeto
-
-### Links Úteis:
-
-Aprenda Markdown e use-o para documentar o projeto  
-
-> [Sintaxe básica de gravação e formatação no GitHub](https://guides.github.com/features/mastering-markdown/)
-
-> [Suporte Github](https://help.github.com/pt/github/writing-on-github/getting-started-with-writing-and-formatting-on-github)
